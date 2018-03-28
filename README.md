@@ -2,8 +2,8 @@
 Djangoでモザイクアートが作れるアプリケーションを作成します。
 
 モザイクアート作成のソースコードのリポジトリ：
-ftnext/[mosaic-art-python
-](https://github.com/ftnext/mosaic-art-python)
+ftnext/[mosaic-art-python](https://github.com/ftnext/mosaic-art-python)
+
 # 動作させるまで
 * `pip install django==1.11`
 
