@@ -33,7 +33,7 @@ def art_list(request):
         print('モザイクアート完成')
     else:  # ← methodが'POST'ではない = 最初のページ表示時の処理
         print('POSTでないので処理はなにもしない')
-    mosaic_arts = MosaicArt.objects.order_by('-created_date')
+    mosaic_arts = MosaicArt.objects.order_by('-created_date')[:2]
     return render(request, 'gallery/art_list.html', {'mosaic_arts': mosaic_arts})
 
 def make_mosaic():
