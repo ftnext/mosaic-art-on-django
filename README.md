@@ -5,7 +5,10 @@ Djangoでモザイクアートが作れるアプリケーションを作成し�
 ftnext/[mosaic-art-python](https://github.com/ftnext/mosaic-art-python)
 
 # 動作させるまで
-* `pip install django==1.11`
+* このリポジトリをクローン
+* 必要なモジュールをpip install
+  * `pip install django==1.11`
+* `python manage.py migrate` (`python manage.py runserver`すると実行を促すメッセージが出た)
 
 # 参考
 * [Django Girls Tutorial](https://djangogirlsjapan.gitbooks.io/workshop_tutorialjp/)
