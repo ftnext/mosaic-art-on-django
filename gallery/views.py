@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def art_list(request):
+    return render(request, 'gallery/art_list.html', {})
