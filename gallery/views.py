@@ -1,4 +1,5 @@
 import csv
+import os.path
 
 from django.shortcuts import render
 from .models import MosaicArt
@@ -23,6 +24,33 @@ POS_BLUE  = 3
 def art_list(request):
     mosaic_arts = MosaicArt.objects.order_by('-created_date')
     return render(request, 'gallery/art_list.html', {'mosaic_arts': mosaic_arts})
+
+def make_mosaic():
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    color_data_file = os.path.join(BASE_DIR, 'static/images/data/average_color.csv')
+    color_data = materials_list_from_file(color_data_file)
+
+    target_file = os.path.join(BASE_DIR, 'static/images/target/my_icon.png')
+    icon_im = image_process.open_image_RGB(target_file)
+    icon_im_width, icon_im_height = icon_im.size
+    mosaic_icon_im = Image.new('RGBA', (1600, 1600))
+
+    for left in range(0, icon_im_width, DOT_AREA_ONE_SIDE):
+        for top in range(0, icon_im_height, DOT_AREA_ONE_SIDE):
+            average_color = calc.average_color_in_range(icon_im, left, top,
+                                left+DOT_AREA_ONE_SIDE, top+DOT_AREA_ONE_SIDE)
+            if len(average_color) != 3:
+                continue
+
+            filename = similar_color_filename(average_color, color_data)
+            # 距離最小のファイルを1600×1600の画像に貼り付け
+            open_file = os.path.join(BASE_DIR, 'static/images/material/euph_part_icon/'+filename)
+            area_im = Image.open(open_file)
+            mosaic_icon_im.paste(area_im, (left//DOT_AREA_ONE_SIDE * THUMBNAIL_ONE_SIDE,
+                                           top//DOT_AREA_ONE_SIDE * THUMBNAIL_ONE_SIDE))
+
+    saved_file = os.path.join(BASE_DIR, 'static/images/ftnext/my_icon_mosaic.png')
+    mosaic_icon_im.save(saved_file)
 
 def materials_list_from_file(filename):
     """Returns a list which contains material image information.
