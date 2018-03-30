@@ -7,6 +7,11 @@
             <h1><a href="">Mosaic Art Gallery</a></h1>
         </div>
 
+        <form action="art_list" method="POST">
+          {% csrf_token %}
+          <input type="submit" value="モザイクアートを作る"/>
+        </form>
+
         {% load static %}
         {% get_static_prefix as STATIC_PREFIX %}
         {% for mosaic_art in mosaic_arts %}
