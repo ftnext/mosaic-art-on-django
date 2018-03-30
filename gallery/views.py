@@ -1,6 +1,7 @@
 import csv
 import os.path
 
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from .models import MosaicArt
 
@@ -22,6 +23,16 @@ POS_BLUE  = 3
 
 
 def art_list(request):
+    if request.method == "POST":
+        print('送信ボタン押下されたのでモザイクアートを作る')
+        # 現状はadminがモザイクアートを決め打ちで作ったことになる
+        make_mosaic()
+        me = User.objects.get(username='ftnext')
+        MosaicArt.objects.create(user = me,
+            file_name='my_icon_mosaic.png', original_image='my_icon.png')
+        print('モザイクアート完成')
+    else:  # ← methodが'POST'ではない = 最初のページ表示時の処理
+        print('POSTでないので処理はなにもしない')
     mosaic_arts = MosaicArt.objects.order_by('-created_date')
     return render(request, 'gallery/art_list.html', {'mosaic_arts': mosaic_arts})
 
