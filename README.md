@@ -28,12 +28,12 @@ ftnext/[mosaic-art-python](https://github.com/ftnext/mosaic-art-python)
 * ┣ mysite/ :プロジェクト
 * ┣ gallery/ :モザイクアート作成・表示アプリケーション
 * ┗ static/ :静的ファイル配置ディレクトリ
-*   ┣ empty :static/ディレクトリがあることをトラックさせるために作成した空ファイル
-*   ┗ images/
-*     ┣ data/ :average_color.csvなど素材画像の情報のファイルを置く
-*     ┣ material/ :縮小した素材画像を置く(縮小するのはモザイクアート作成にかかる時間を短くするため)
-*     ┣ target/ :対象画像を置く
-*     ┗ <superuser_name>/ :スーパーユーザが作成したモザイクアートを置く(スーパーユーザごとに作る想定)
+  * ┣ empty :static/ディレクトリがあることをトラックさせるために作成した空ファイル
+  * ┗ images/
+    * ┣ data/ :average_color.csvなど素材画像の情報のファイルを置く
+    * ┣ material/ :縮小した素材画像を置く(縮小するのはモザイクアート作成にかかる時間を短くするため)
+    * ┣ target/ :対象画像を置く
+    * ┗ <superuser_name>/ :スーパーユーザが作成したモザイクアートを置く(スーパーユーザごとに作る想定)
 
 # 参考
 * [Django Girls Tutorial](https://djangogirlsjapan.gitbooks.io/workshop_tutorialjp/)
