@@ -14,6 +14,7 @@ ftnext/[mosaic-art-python](https://github.com/ftnext/mosaic-art-python)
 * このリポジトリをクローン
 * 必要なモジュールをpip install
   * `pip install django==1.11`
+  * `pip install pillow`
 * `python manage.py migrate` (`python manage.py runserver`すると実行を促すメッセージが出た)
 
 # 参考
