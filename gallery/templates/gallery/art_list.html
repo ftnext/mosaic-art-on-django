@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title>Mosaic Art Gallery</title>
+    </head>
+    <body>
+        <div>
+            <h1><a href="">Mosaic Art Gallery</a></h1>
+        </div>
+
+        {% for mosaic_art in mosaic_arts %}
+            <div>
+                <p>created: {{ mosaic_art.created_date }}</p>
+                <h2><a href="">Mosaic Art #{{ mosaic_art.id }}</a></h2>
+                <p>user: {{ mosaic_art.user }}</p>
+                <p>file_name: {{ mosaic_art.file_name }}</p>
+                <p>original_image: {{ mosaic_art.original_image }}</p>
+            </div>
+        {% endfor %}
+    </body>
+</html>
