@@ -15,7 +15,10 @@ ftnext/[mosaic-art-python](https://github.com/ftnext/mosaic-art-python)
 * 必要なモジュールをpip install
   * `pip install django==1.11`
   * `pip install pillow`
-* `python manage.py migrate` (`python manage.py runserver`すると実行を促すメッセージが出た)
+* manage.py関連のコマンド
+  * `python manage.py migrate` (`python manage.py runserver`すると実行を促すメッセージが出た)
+  * `python manage.py migrate gallery` (MosaicArtモデルのテーブルを作成)
+  * `python manage.py createsuperuser` (スーパーユーザの作成)
 
 # 参考
 * [Django Girls Tutorial](https://djangogirlsjapan.gitbooks.io/workshop_tutorialjp/)
