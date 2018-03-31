@@ -37,12 +37,19 @@ def art_list(request):
     mosaic_arts = MosaicArt.objects.order_by('-created_date')[:2]
     return render(request, 'gallery/art_list.html', {'mosaic_arts': mosaic_arts})
 
-def make_mosaic():
+def make_mosaic(target_im, saved_file_name):
+    """Creates mosaic art from target image
+
+    Args:
+        target_im: target image file name (:str)
+            example: 'bar.png'
+        saved_file_name: mosaic art file name (:str)
+    """
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     color_data_file = os.path.join(BASE_DIR, 'static/images/data/average_color.csv')
     color_data = materials_list_from_file(color_data_file)
 
-    target_file = os.path.join(BASE_DIR, 'static/images/target/my_icon.png')
+    target_file = os.path.join(BASE_DIR, 'static/images/target/{}'.format(target_im))
     icon_im = image_process.open_image_RGB(target_file)
     icon_im_width, icon_im_height = icon_im.size
     mosaic_icon_im = Image.new('RGBA', (1600, 1600))
@@ -61,7 +68,8 @@ def make_mosaic():
             mosaic_icon_im.paste(area_im, (left//DOT_AREA_ONE_SIDE * THUMBNAIL_ONE_SIDE,
                                            top//DOT_AREA_ONE_SIDE * THUMBNAIL_ONE_SIDE))
 
-    saved_file = os.path.join(BASE_DIR, 'static/images/ftnext/my_icon_mosaic.png')
+    saved_file_path = 'static/images/ftnext/{}'.format(saved_file_name)
+    saved_file = os.path.join(BASE_DIR, saved_file_path)
     mosaic_icon_im.save(saved_file)
 
 def mosaic_art_file_name(target_im):
