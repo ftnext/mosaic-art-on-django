@@ -26,12 +26,17 @@ POS_BLUE  = 3
 def art_list(request):
     if request.method == "POST":
         print('送信ボタン押下されたのでモザイクアートを作る')
-        # 現状はadminがモザイクアートを決め打ちで作ったことになる
-        make_mosaic()
+        # 現状はadminがモザイクアートを作ったことになる
+        target_im = request.POST['target_image']
+        print('対象画像', target_im)
+        # モザイクアートのファイル名とDBのfile_nameフィールドが一致するように
+        # ファイル名の組み立てをここで実施する
+        saved_file_name = mosaic_art_file_name(target_im)
+        make_mosaic(target_im, saved_file_name)
         me = User.objects.get(username='ftnext')
         MosaicArt.objects.create(user = me,
-            file_name='my_icon_mosaic.png', original_image='my_icon.png')
-        print('モザイクアート完成')
+            file_name=saved_file_name, original_image=target_im)
+        print('Mosaic art created at', saved_file_name)
     else:  # ← methodが'POST'ではない = 最初のページ表示時の処理
         print('POSTでないので処理はなにもしない')
     mosaic_arts = MosaicArt.objects.order_by('-created_date')[:2]
