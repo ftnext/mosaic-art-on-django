@@ -1,4 +1,5 @@
 import csv
+import datetime
 import os.path
 
 from django.contrib.auth.models import User
@@ -62,6 +63,49 @@ def make_mosaic():
 
     saved_file = os.path.join(BASE_DIR, 'static/images/ftnext/my_icon_mosaic.png')
     mosaic_icon_im.save(saved_file)
+
+def mosaic_art_file_name(target_im):
+    """Returns a file name from target image name
+
+    Args:
+        target_im: path of target image file (:str)
+            example: 'foo/bar.png'
+
+    Returns:
+        str
+            example: 'bar_mosaic_20180331121251.png'
+    """
+    target_file_name = extract_file_name(target_im)
+    now_dt = now_datetime()
+    return '{0}_mosaic_{1}.png'.format(target_file_name, now_dt)
+
+def extract_file_name(file_path):
+    """Extracts file name from file path (not including extension)
+
+    Args:
+        file_path: str
+            example: 'foo/bar.png'
+
+    Returns:
+        str
+            example: 'bar'
+
+    """
+    # ファイルパスからファイル名(拡張子含む)を取り出す
+    file_name = file_path.split('/')[-1]
+    # 拡張子を取り除く
+    return file_name.split('.')[0]
+
+def now_datetime():
+    """Returns current time as '%Y%m%d%H%M%S' string
+
+    Returns:
+        str
+            example: '20180331121251'
+                current time 2018/3/31 12:12:51
+    """
+    now = datetime.datetime.now()
+    return now.strftime('%Y%m%d%H%M%S')
 
 def materials_list_from_file(filename):
     """Returns a list which contains material image information.
