@@ -1,4 +1,5 @@
 import csv
+import datetime
 import os.path
 
 from django.contrib.auth.models import User
@@ -25,23 +26,35 @@ POS_BLUE  = 3
 def art_list(request):
     if request.method == "POST":
         print('送信ボタン押下されたのでモザイクアートを作る')
-        # 現状はadminがモザイクアートを決め打ちで作ったことになる
-        make_mosaic()
+        # 現状はadminがモザイクアートを作ったことになる
+        target_im = request.POST['target_image']
+        print('対象画像', target_im)
+        # モザイクアートのファイル名とDBのfile_nameフィールドが一致するように
+        # ファイル名の組み立てをここで実施する
+        saved_file_name = mosaic_art_file_name(target_im)
+        make_mosaic(target_im, saved_file_name)
         me = User.objects.get(username='ftnext')
         MosaicArt.objects.create(user = me,
-            file_name='my_icon_mosaic.png', original_image='my_icon.png')
-        print('モザイクアート完成')
+            file_name=saved_file_name, original_image=target_im)
+        print('Mosaic art created at', saved_file_name)
     else:  # ← methodが'POST'ではない = 最初のページ表示時の処理
         print('POSTでないので処理はなにもしない')
     mosaic_arts = MosaicArt.objects.order_by('-created_date')[:2]
     return render(request, 'gallery/art_list.html', {'mosaic_arts': mosaic_arts})
 
-def make_mosaic():
+def make_mosaic(target_im, saved_file_name):
+    """Creates mosaic art from target image
+
+    Args:
+        target_im: target image file name (:str)
+            example: 'bar.png'
+        saved_file_name: mosaic art file name (:str)
+    """
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     color_data_file = os.path.join(BASE_DIR, 'static/images/data/average_color.csv')
     color_data = materials_list_from_file(color_data_file)
 
-    target_file = os.path.join(BASE_DIR, 'static/images/target/my_icon.png')
+    target_file = os.path.join(BASE_DIR, 'static/images/target/{}'.format(target_im))
     icon_im = image_process.open_image_RGB(target_file)
     icon_im_width, icon_im_height = icon_im.size
     mosaic_icon_im = Image.new('RGBA', (1600, 1600))
@@ -60,8 +73,52 @@ def make_mosaic():
             mosaic_icon_im.paste(area_im, (left//DOT_AREA_ONE_SIDE * THUMBNAIL_ONE_SIDE,
                                            top//DOT_AREA_ONE_SIDE * THUMBNAIL_ONE_SIDE))
 
-    saved_file = os.path.join(BASE_DIR, 'static/images/ftnext/my_icon_mosaic.png')
+    saved_file_path = 'static/images/ftnext/{}'.format(saved_file_name)
+    saved_file = os.path.join(BASE_DIR, saved_file_path)
     mosaic_icon_im.save(saved_file)
+
+def mosaic_art_file_name(target_im):
+    """Returns a file name from target image name
+
+    Args:
+        target_im: path of target image file (:str)
+            example: 'foo/bar.png'
+
+    Returns:
+        str
+            example: 'bar_mosaic_20180331121251.png'
+    """
+    target_file_name = extract_file_name(target_im)
+    now_dt = now_datetime()
+    return '{0}_mosaic_{1}.png'.format(target_file_name, now_dt)
+
+def extract_file_name(file_path):
+    """Extracts file name from file path (not including extension)
+
+    Args:
+        file_path: str
+            example: 'foo/bar.png'
+
+    Returns:
+        str
+            example: 'bar'
+
+    """
+    # ファイルパスからファイル名(拡張子含む)を取り出す
+    file_name = file_path.split('/')[-1]
+    # 拡張子を取り除く
+    return file_name.split('.')[0]
+
+def now_datetime():
+    """Returns current time as '%Y%m%d%H%M%S' string
+
+    Returns:
+        str
+            example: '20180331121251'
+                current time 2018/3/31 12:12:51
+    """
+    now = datetime.datetime.now()
+    return now.strftime('%Y%m%d%H%M%S')
 
 def materials_list_from_file(filename):
     """Returns a list which contains material image information.
