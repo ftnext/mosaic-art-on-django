@@ -9,6 +9,14 @@
 
         <form action="art_list" method="POST">
           {% csrf_token %}
+          <p>
+            <label>モザイクアートにする画像を選択してください：
+              <select name="target_image">
+                <option value="my_icon.png">my_icon.png</option>
+                <option value="slack.png">slack.png</option>
+              </select>
+            </label>
+          </p>
           <input type="submit" value="モザイクアートを作る"/>
         </form>
 
